@@ -52,6 +52,11 @@ class Comentario(models.Model):
     texto = models.TextField()
     nota = models.IntegerField(default=5)   # nota de 1-5 estrelas
     
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["professor", "autor"], name="Apenas um comentario por professor")
+        ]
+
     def __str__(self):
         return f'{self.autor.username} - {self.professor.nome}'
     
