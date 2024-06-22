@@ -3,18 +3,24 @@ from django.contrib.auth.models import User
 from django.db.models import Avg
 
 # Tabela auxiliar de todos os cursos
-class Cursos(models.Model):
+class Curso(models.Model):
     curso = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.curso
 
 # Tabela Auxiliar de faculdades
-class Faculdades(models.Model):
+class Faculdade(models.Model):
     faculdade = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.faculdade
 
 # Tabela principal de professores
 class Professor(models.Model):
     nome = models.CharField(max_length=100)
-    curso = models.ForeignKey(Cursos,on_delete=models.PROTECT)
-    faculdade = models.ForeignKey(Faculdades,related_name='faculdades',on_delete=models.PROTECT)
+    curso = models.ForeignKey(Curso,on_delete=models.PROTECT)
+    faculdade = models.ForeignKey(Faculdade,related_name='faculdades',on_delete=models.PROTECT)
 
     def __str__(self):
         return self.nome
