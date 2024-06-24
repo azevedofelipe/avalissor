@@ -33,7 +33,7 @@ class Professor(models.Model):
         media = 0
         
         if avaliacao['media'] is not None:
-            media = avaliacao['media']
+            media = round(avaliacao['media'],2)
 
         return media
 
