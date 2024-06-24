@@ -45,6 +45,11 @@ class Professor(models.Model):
     def curso_nome(self):
         return self.curso.curso
 
+    @property
+    def comment_count(self):
+        return Comentario.objects.filter(professor = self).count()
+        
+
 # Tabela de comentarios e nota para cada professor
 class Comentario(models.Model):
     professor = models.ForeignKey(Professor,on_delete=models.CASCADE,related_name='avaliacao')

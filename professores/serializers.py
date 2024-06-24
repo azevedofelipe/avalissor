@@ -5,10 +5,11 @@ from rest_framework import serializers
 class ProfessorSerializer(serializers.ModelSerializer):
     faculdade_nome = serializers.ReadOnlyField()
     curso_nome = serializers.ReadOnlyField()
+    comment_count = serializers.ReadOnlyField()
 
     class Meta:
         model = Professor 
-        fields = ('id','nome','curso','curso_nome','faculdade','faculdade_nome','nota_count','media_nota')
+        fields = ('id','nome','curso','curso_nome','faculdade','faculdade_nome','nota_count','media_nota','comment_count')
 
 
 class ComentarioSerializer(serializers.ModelSerializer):
