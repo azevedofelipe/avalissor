@@ -2,8 +2,8 @@ from django.shortcuts import render
 from avalissor.permissions import isOwner
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Professor,Comentario
-from .serializers import ProfessorSerializer,ComentarioSerializer
+from .models import Professor,Comentario,LikesComentarios
+from .serializers import ProfessorSerializer,ComentarioSerializer, LikesComentarioSerializer
 from django_filters import rest_framework as filters 
 
 # API para listar todos os professores
@@ -41,3 +41,19 @@ class ComentarioDetalhes(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = ComentarioSerializer
     queryset = Comentario.objects.all()
+    
+
+# API para likes para comentarios
+class LikeCriar(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    
+    serializer_class = LikesComentarioSerializer
+    queryset = LikesComentarios.objects.all()
+
+
+# API para alterar like
+class LikeDetalhes(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (isOwner,)
+
+    serializer_class = LikesComentarioSerializer
+    queryset = LikesComentarios.objects.all()

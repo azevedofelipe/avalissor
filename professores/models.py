@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Avg
+from django.db.models import Avg, Sum
 
 # Tabela auxiliar de todos os cursos
 class Curso(models.Model):
@@ -58,7 +58,7 @@ class Comentario(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.autor.username} - {self.professor.nome}'
+        return f'{self.autor.username} - {self.professor.nome} - {self.nota}'
     
     @property
     def professor_nome(self):
@@ -68,3 +68,55 @@ class Comentario(models.Model):
     @property
     def autor_nome(self):
         return self.autor.username
+    
+    @property
+    def likes_sum(self):
+        sum_likes = LikesComentarios.objects.filter(comentario = self).aggregate(sum_likes=Sum('like'))
+        sum = 0
+        
+        if sum_likes['sum_likes'] is not None:
+            sum = sum_likes['sum_likes']
+
+        return sum
+    
+    @property
+    def upvotes(self):
+        upvotes = LikesComentarios.objects.filter(comentario=self,like=1).count()
+        count = 0
+
+        if upvotes:
+            count = upvotes
+
+        return count
+
+
+    @property
+    def downvotes(self):
+        downvotes = LikesComentarios.objects.filter(comentario=self,like=1).count()
+        count = 0
+
+        if downvotes:
+            count = downvotes
+
+        return count
+
+# Like para comentarios e avaliacoes de professores
+class LikesComentarios(models.Model):
+    like = models.IntegerField(default=0)   # +1 = Like, -1 = Dislike
+    autor = models.ForeignKey(User,on_delete=models.CASCADE)
+    comentario = models.ForeignKey(Comentario,on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.autor.username} - {self.like} - {self.comentario.autor.username}'
+    
+    @property
+    def autor_nome(self):
+        return self.autor.username
+    
+    @property
+    def comentario_nome(self):
+        return self.comentario.autor.username
+    
+    @property
+    def professor_nome(self):
+        return self.comentario.professor.nome
