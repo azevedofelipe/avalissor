@@ -37,6 +37,7 @@
             border-bottom: 1px solid #ccc;
             padding: 10px 0;
             margin-bottom: 10px;
+            position: relative;
         }
 
         strong {
@@ -47,6 +48,16 @@
             margin-top: 5px;
             font-size: 0.9em;
             color: #666;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #007bff;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -60,6 +71,7 @@
                 <strong>{{ professor.nome }}</strong>
                 <div class="info">Faculdade: {{ professor.faculdade_nome }} | Curso: {{ professor.curso_nome }}</div>
                 <div class="info">Média de Nota: {{ professor.media_nota }} | Número de Comentários: {{ professor.comment_count }}</div>
+                <a href="{% url 'professor:professor_details' professor.id %}" class="arrow">&#8594;</a>
             </li>
             {% empty %}
             <li>Nenhum professor encontrado.</li>

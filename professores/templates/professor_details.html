@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ professor.nome }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .professor-info {
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 20px; /* Adjust as needed for vertical positioning */
+            left: 20px; /* Adjust as needed for horizontal positioning */
+            color: #007bff; /* Link color */
+            text-decoration: none;
+            font-size: 24px; /* Adjust font size as needed */
+            z-index: 1;
+        }
+        
+        .back-link::before {
+            content: '\2190'; /* Unicode character for left arrow */
+            font-size: 26px;
+            font-weight: bold;
+        } 
+        
+        .comment-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9; /* Light background for the section */
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+        
+        .comment-section h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em; /* Increase font size for the heading */
+            text-align: center; /* Center the heading */
+            color: #007bff; /* Primary color for heading */
+        }
+        
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Space between form elements */
+        }
+        
+        .comment-form textarea {
+            width: 95%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em; /* Increase font size for better readability */
+            resize: vertical;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* Inner shadow for depth */
+        }
+        
+        .comment-form textarea::placeholder {
+            color: #999; /* Light grey placeholder text */
+        }
+        
+        .submit-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+        
+        .submit-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+       .star-rating {
+            margin-bottom: 10px;
+            direction: rtl;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .star-rating label::before {
+            content: '\2605'; /* Star character */
+            color: #ddd;
+        }
+
+        .star-rating input:checked ~ label::before {
+            color: #f8c52a; /* Yellow star color */
+        }
+
+        .star-rating input:checked ~ label,
+        .star-rating input:hover ~ label {
+            color: #f5b301; /* Highlight color for selected stars */
+        }
+
+        .star-rating input:hover ~ label,
+        .star-rating input:checked ~ label,
+        .star-rating input:checked ~ label ~ label {
+            color: #f5b301; /* Change color on hover or selection */
+        }
+
+        .existing-comments {
+            margin-top: 40px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+        .existing-comments h2 {
+            margin-bottom: 20px;
+        }
+
+        .comment {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #007bff;
+            position: relative;
+            flex-wrap: wrap;
+        }
+        
+        .comment-author {
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+            flex: 1;
+        }
+        
+        .comment-rating {
+            display: inline-block;
+            position: relative;
+            font-size: 24px; /* Adjust font size to fit stars */
+            color: #ddd; /* Grey for unshaded stars */
+            margin: 0;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+        
+        .comment-rating::before {
+            content: '\2605 \2605 \2605 \2605 \2605'; /* Display 5 empty stars */
+        }
+        
+        .comment-rating::after {
+            content: '\2605 \2605 \2605 \2605 \2605'; /* Display 5 shaded stars */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0; /* Default to 0 width */
+            color: #f8c52a; /* Yellow color for shaded stars */
+            overflow: hidden;
+        }
+        
+        .comment-rating[data-rating="1"]::after {
+            width: 20%; /* Show 1 star */
+        }
+        
+        .comment-rating[data-rating="2"]::after {
+            width: 40%; /* Show 2 stars */
+        }
+        
+        .comment-rating[data-rating="3"]::after {
+            width: 60%; /* Show 3 stars */
+        }
+        
+        .comment-rating[data-rating="4"]::after {
+            width: 80%; /* Show 4 stars */
+        }
+        
+        .comment-rating[data-rating="5"]::after {
+            width: 100%; /* Show 5 stars */
+        }
+        
+        .comment-text {
+            margin-top: 10px;
+            line-height: 1.6;
+            flex-basis: 100%;
+        } 
+        
+        .comment::after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="{% url 'professor:professor_list' %}" class="back-link"></a>
+        <h1>{{ professor.nome }}</h1>
+        <div class="professor-info">
+            <p><strong>Faculdade:</strong> {{ professor.faculdade_nome }}</p>
+            <p><strong>Curso:</strong> {{ professor.curso_nome }}</p>
+            <p><strong>Média de Nota:</strong> {{ professor.media_nota }}</p>
+            <p><strong>Número de Comentários:</strong> {{ professor.comment_count }}</p>
+        </div>
+        <div class="comment-section">
+            <h2>Novo Comentário</h2>
+            <form action="{% url 'professor:create_comment' professor.id %}" method="POST" class="comment-form">
+                {% csrf_token %}
+                <textarea name="texto" rows="4" placeholder="Digite seu comentário aqui..." required></textarea>
+                <div class="star-rating">
+                <input type="radio" id="star5" name="nota" value="5"><label for="star5" title="5 estrelas"></label>
+                <input type="radio" id="star4" name="nota" value="4"><label for="star4" title="4 estrelas"></label>
+                <input type="radio" id="star3" name="nota" value="3"><label for="star3" title="3 estrelas"></label>
+                <input type="radio" id="star2" name="nota" value="2"><label for="star2" title="2 estrelas"></label>
+                <input type="radio" id="star1" name="nota" value="1"><label for="star1" title="1 estrela"></label>
+            </div>
+            <button type="submit" class="submit-button">Avaliar</button>
+            </form>
+
+        </div>
+
+            <!-- New section for displaying existing comments -->
+        <div class="existing-comments">
+            <h2>Comentários</h2>
+            {% for comment in comments %}
+                <div class="comment">
+                    <p class="comment-author">{{ comment.autor }}</p>
+                    <p class="comment-rating" data-rating="{{ comment.nota }}"></p>
+                    <p class="comment-text">{{ comment.texto }}</p>
+                </div>
+                {% empty %}
+                <p>Não há comentários para este professor ainda.</p>
+                {% endfor %}
+            </div>
+</body>
+
+</html>
