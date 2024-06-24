@@ -85,18 +85,18 @@ class Comentario(models.Model):
         count = 0
 
         if upvotes:
-            count = upvotes
-
+            return upvotes
+        
         return count
 
 
     @property
     def downvotes(self):
-        downvotes = LikesComentarios.objects.filter(comentario=self,like=1).count()
+        downvotes = LikesComentarios.objects.filter(comentario=self,like=-1).count()
         count = 0
 
         if downvotes:
-            count = downvotes
+           return downvotes 
 
         return count
 
@@ -105,7 +105,14 @@ class LikesComentarios(models.Model):
     like = models.IntegerField(default=0)   # +1 = Like, -1 = Dislike
     autor = models.ForeignKey(User,on_delete=models.CASCADE)
     comentario = models.ForeignKey(Comentario,on_delete=models.CASCADE)
-    
+     
+    # Limit likes to one per author
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["comentario", "autor"], name="Apenas um like por comentario")
+        ]
+
+
     def __str__(self):
         return f'{self.autor.username} - {self.like} - {self.comentario.autor.username}'
     
