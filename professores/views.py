@@ -37,7 +37,7 @@ def create_comment(request, professor_id):
         comentario.save()
         
         # Redirect to the professor detail page or wherever you want after submission
-        return professor_details(request,professor_id) 
+        return redirect('professor:professor_details',prof_id=professor.pk)
 
 
 # API para listar todos os professores
