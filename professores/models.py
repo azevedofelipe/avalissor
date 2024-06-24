@@ -48,7 +48,7 @@ class Professor(models.Model):
     @property
     def comment_count(self):
         return Comentario.objects.filter(professor = self).count()
-        
+
 
 # Tabela de comentarios e nota para cada professor
 class Comentario(models.Model):
@@ -68,6 +68,10 @@ class Comentario(models.Model):
     @property
     def professor_nome(self):
         return self.professor.nome
+    
+    @property
+    def professor_id(self):
+        return self.professor.pk
     
 
     @property

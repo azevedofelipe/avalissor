@@ -1,10 +1,44 @@
-from django.shortcuts import render
-from avalissor.permissions import isOwner
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.shortcuts import render,redirect,get_object_or_404
+from django.urls import reverse
 from .models import Professor,Comentario,LikesComentarios
-from .serializers import ProfessorSerializer,ComentarioSerializer, LikesComentarioSerializer
-from django_filters import rest_framework as filters 
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+   
+def professor_list(request):
+    professores = Professor.objects.all()
+    return render(request,'professors.html',{'professores':professores})
+
+
+def professor_details(request,prof_id):
+    professor = Professor.objects.get(id=prof_id)
+    comments = Comentario.objects.filter(professor_id=prof_id).all()
+    return render(request, 'professor_details.html', {'professor': professor, 'comments': comments}) 
+
+@login_required(login_url='/auth/login/')          
+def create_comment(request, professor_id):
+    professor = get_object_or_404(Professor, id=professor_id)
+    
+    if request.method == 'POST':
+        texto = request.POST['texto']
+        nota = request.POST.get('nota', 5)  # Default to 5 if no rating is selected
+        
+        comentario = Comentario.objects.filter(professor=professor,autor=request.user).first()
+
+        if comentario:
+            return HttpResponse("Ja existe")
+        
+        # Create the comment
+        comentario = Comentario(
+            professor=professor,
+            autor=request.user,
+            texto=texto,
+            nota=nota
+        )
+        comentario.save()
+        
+        # Redirect to the professor detail page or wherever you want after submission
+        return professor_details(request,professor_id) 
+
 
 # API para listar todos os professores
 #class ProfessorList(generics.ListCreateAPIView):
@@ -18,11 +52,6 @@ from django_filters import rest_framework as filters
 #    }
 #    serializer_class = ProfessorSerializer
 #    queryset = Professor.objects.all().distinct()
-    
-def professor_list(request):
-    professores = Professor.objects.all()
-    return render(request,'professors.html',{'professores':professores})
-
 
 # API para RUD de professores C[RUD]
 #class ProfessorDetalhes(generics.RetrieveUpdateDestroyAPIView):
