@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Professores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+            margin-bottom: 10px;
+        }
+
+        strong {
+            font-size: 1.2em;
+        }
+
+        .info {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Lista de Professores</h1>
+        <ul>
+            {% for professor in professores %}
+            <li>
+                <strong>{{ professor.nome }}</strong>
+                <div class="info">Faculdade: {{ professor.faculdade_nome }} | Curso: {{ professor.curso_nome }}</div>
+                <div class="info">Média de Nota: {{ professor.media_nota }} | Número de Comentários: {{ professor.comment_count }}</div>
+            </li>
+            {% empty %}
+            <li>Nenhum professor encontrado.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+</html>
