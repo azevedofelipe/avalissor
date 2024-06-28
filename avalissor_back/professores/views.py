@@ -14,7 +14,6 @@ def professor_details(request,prof_id):
     comments = Comentario.objects.filter(professor_id=prof_id).all()
     return render(request, 'professor_details.html', {'professor': professor, 'comments': comments}) 
 
-@login_required(login_url='/auth/login/')          
 def create_comment(request, professor_id):
     professor = get_object_or_404(Professor, id=professor_id)
     

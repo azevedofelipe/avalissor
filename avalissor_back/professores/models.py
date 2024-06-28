@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Avg, Sum
+import datetime
 
 # Tabela auxiliar de todos os cursos
 class Curso(models.Model):
@@ -53,9 +54,11 @@ class Professor(models.Model):
 # Tabela de comentarios e nota para cada professor
 class Comentario(models.Model):
     professor = models.ForeignKey(Professor,on_delete=models.CASCADE,related_name='avaliacao')
-    autor = models.ForeignKey(User,on_delete=models.CASCADE)
+    autor = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)   # Optional user login
     texto = models.TextField()
     nota = models.IntegerField(default=5)   # nota de 1-5 estrelas
+    dificuldade = models.IntegerField(default=0) # dificuldade de 1-5 estrelas
+    date = models.DateField(default=datetime.date.today)
     
     class Meta:
         constraints = [

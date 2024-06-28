@@ -59,6 +59,33 @@
             color: #007bff;
             cursor: pointer;
         }
+        /* Make the list item look like a clickable block */
+        .clickable-item {
+            cursor: pointer; /* Change cursor to pointer */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+            position: relative;
+        }
+        
+        /* Ensure the link inside does not interfere with the clickable area */
+        .clickable-item a.arrow {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        /* Add a hover effect */
+        .clickable-item:hover {
+            background-color: #f0f0f0;
+        }
+
     </style>
 </head>
 
@@ -67,7 +94,7 @@
         <h1>Lista de Professores</h1>
         <ul>
             {% for professor in professores %}
-            <li>
+            <li class="clickable-item" data-url="{% url 'professor:professor_details' professor.id %}">
                 <strong>{{ professor.nome }}</strong>
                 <div class="info">Faculdade: {{ professor.faculdade_nome }} | Curso: {{ professor.curso_nome }}</div>
                 <div class="info">Média de Nota: {{ professor.media_nota }} | Número de Comentários: {{ professor.comment_count }}</div>
@@ -78,6 +105,17 @@
             {% endfor %}
         </ul>
     </div>
-</body>
 
+    <!-- Include this script at the bottom of the body -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.clickable-item');
+            items.forEach(item => {
+                item.addEventListener('click', function() {
+                    window.location.href = this.dataset.url;
+                });
+            });
+        });
+    </script>
+</body>
 </html>

@@ -219,6 +219,40 @@
             display: table;
             clear: both;
         }
+
+       .diff-rating{
+            margin-bottom: 10px;
+            direction: rtl;
+        }
+
+        .diff-rating input {
+            display: none;
+        }
+
+        .diff-rating label {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .diff-rating label::before {
+            content: '\2605'; /* Star character */
+            color: #ddd;
+        }
+
+        .diff-rating input:checked ~ label::before {
+            color: #f8c52a; /* Yellow star color */
+        }
+
+        .diff-rating input:checked ~ label,
+        .diff-rating input:hover ~ label {
+            color: #f5b301; /* Highlight color for selected stars */
+        }
+
+        .diff-rating input:hover ~ label,
+        .diff-rating input:checked ~ label,
+        .diff-rating input:checked ~ label ~ label {
+            color: #f5b301; /* Change color on hover or selection */
+        }
     </style>
 </head>
 
@@ -237,13 +271,20 @@
             <form action="{% url 'professor:create_comment' professor.id %}" method="POST" class="comment-form">
                 {% csrf_token %}
                 <textarea name="texto" rows="4" placeholder="Digite seu comentário aqui..." required></textarea>
-                <div class="star-rating">
+                <div class="star-rating">Nota
                 <input type="radio" id="star5" name="nota" value="5"><label for="star5" title="5 estrelas"></label>
                 <input type="radio" id="star4" name="nota" value="4"><label for="star4" title="4 estrelas"></label>
                 <input type="radio" id="star3" name="nota" value="3"><label for="star3" title="3 estrelas"></label>
                 <input type="radio" id="star2" name="nota" value="2"><label for="star2" title="2 estrelas"></label>
                 <input type="radio" id="star1" name="nota" value="1"><label for="star1" title="1 estrela"></label>
-            </div>
+                </div>
+                <div class="diff-rating">Difficuldade
+                <input type="radio" id="diff5" name="diff" value="5"><label for="diff5" title="5 estrelas"></label>
+                <input type="radio" id="diff4" name="diff" value="4"><label for="diff4" title="4 estrelas"></label>
+                <input type="radio" id="diff3" name="diff" value="3"><label for="diff3" title="3 estrelas"></label>
+                <input type="radio" id="diff2" name="diff" value="2"><label for="diff2" title="2 estrelas"></label>
+                <input type="radio" id="diff1" name="diff" value="1"><label for="diff1" title="1 estrela"></label>
+                </div>
             <button type="submit" class="submit-button">Avaliar</button>
             </form>
 
@@ -254,9 +295,10 @@
             <h2>Comentários</h2>
             {% for comment in comments %}
                 <div class="comment">
-                    <p class="comment-author">{{ comment.autor }}</p>
                     <p class="comment-rating" data-rating="{{ comment.nota }}"></p>
+                    <p class="comment-diff">{{ comment.dificuldade }}</p>
                     <p class="comment-text">{{ comment.texto }}</p>
+                    <p class="comment-date">{{ comment.date }}</p>
                 </div>
                 {% empty %}
                 <p>Não há comentários para este professor ainda.</p>
