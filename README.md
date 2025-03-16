@@ -1,0 +1,2 @@
+## Avalissor
+### Este projeto é um site onde os estudantes podem encontrar e avaliar professores da sua faculdade. Os alunos podem pesquisar professores antes de se inscreverem nas suas aulas e avaliar os docentes com base em vários fatores, como presença, carga de trabalho, e outros aspectos relevantes. O objetivo é fornecer uma ferramenta útil para ajudar os estudantes a tomarem decisões informadas sobre quais professores escolher.
